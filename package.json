@@ -1,0 +1,24 @@
+{
+  "name": "sesemes-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "test",
+    "start": "node src/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/michail1988/SesemesServer.git"
+  },
+  "author": "mlab",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/michail1988/SesemesServer/issues"
+  },
+  "homepage": "https://github.com/michail1988/SesemesServer#readme",
+  "dependencies": {
+    "cors": "^2.8.4",
+    "express": "^4.16.2"
+  }
+}

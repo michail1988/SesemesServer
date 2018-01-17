@@ -18,7 +18,9 @@ var corsOptions = {
 app.use(cors(corsOptions));
 
 var bodyParser = require('body-parser')
+var db = require('./db');
 
+db.connect();
 
 var server = app.listen(2000, function() {
 	var host = server.address().address

@@ -18,6 +18,9 @@ var corsOptions = {
 app.use(cors(corsOptions));
 
 var bodyParser = require('body-parser')
+app.use(bodyParser.json()); // support json encoded bodies
+app.use(bodyParser.urlencoded({ extended: true })); 
+
 var db = require('./db');
 
 var users = require('./db/users');
@@ -27,8 +30,8 @@ app.post('/users', function(req, res) {
 	users.createUser(req, function(err, rows) {
 		console.log('Err=' + err)
 		console.log('rows=' + rows)
-		//TODO Michal NOK gdy juz jest taki user?
-		
+		// TODO Michal NOK gdy juz jest taki user?
+
 		res.send('OK');
 	});
 })
@@ -63,11 +66,11 @@ app.post('/login', function(req, res) {
 			console.log('Zalogowano uzytkownika: ' + req.body.username)
 
 			console.log('Znalazlem tyle wierszy=' + rows.length)
-//			res.send(rows[0]);
+			// res.send(rows[0]);
 			if (rows.length == 1) {
 				var row = rows[0];
 				res.send(rows[0]);
-				
+
 				console.log('Wyslano.')
 			}
 		}
@@ -111,6 +114,41 @@ app.get('/user', function(req, res) {
 		}
 
 	});
+})
+
+var sms_to_send = require('./db/to_send');
+app.get('/to_send', function(req, res) {
+	console.log('/to_send')
+
+	sms_to_send.getForSend(function(err, rows) {
+		res.send(rows);
+
+		if (rows && rows.length > 0) {
+
+			console.log('Przeslano ' + rows.length + ' smsow do aplikacji.')
+			sms_to_send.deleteAll(function(err, rows) {
+			});
+		}
+
+	});
+
+	
+})
+
+//format send_date 2015-11-13T01:38:56.842Z
+app.post('/to_send', function(req, res) {
+
+	console.log('----------------------------------------------')
+	console.log('Wyslij sms, fk_user=' + req.body.fk_user + ' message='
+			+ req.body.message + ' receivers=' + req.body.receivers
+			+ ' send_date=' + req.body.send_date);
+
+	var result = sms_to_send.insert(req, function(err, rows) {
+
+			});
+	console.log('Rezultat=' + result)
+
+	res.send('OK');
 })
 
 db.connect();
